@@ -190,23 +190,23 @@ class dpktFilter(object):
         self.lengthFilter = numberRangeFilter(lls)
         self.protoFilter = protocolFilter(lprtls)
 
-    def isSelected(self, dpktoct): # dpktOctet
-        if not self.allIP:
-            if not self.ipFilter.has(dpktoct.sip.getStringIP()):
-                return False
-            if not self.ipFilter.has(dpktoct.dip.getStringIP()):
-                return False
+    def isSelected(self, dpktoct): # dpktOctet # test sequence: proto (O(1)) > number range (O(n)) > port (O(mn)) > IP (O(n^2))
+        if not self.protoFilter.isallowed(dpktoct._protoName):
+            return False
+        if not self.timeFilter.has(dpktoct.timestamp):
+            return False
+        if not self.lengthFilter.has(dpktoct.length):
+            return False
         if not self.allPort:
             if not self.portFilter.has(dpktoct.sport):
                 return False
             if not self.portFilter.has(dpktoct.dport):
                 return False
-        if not self.timeFilter.has(dpktoct.timestamp):
-            return False
-        if not self.lengthFilter.has(dpktoct.length):
-            return False
-        if not self.protoFilter.isallowed(dpktoct._protoName):
-            return False
+        if not self.allIP:
+            if not self.ipFilter.has(dpktoct.sip.getStringIP()):
+                return False
+            if not self.ipFilter.has(dpktoct.dip.getStringIP()):
+                return False
         return True
 
 
