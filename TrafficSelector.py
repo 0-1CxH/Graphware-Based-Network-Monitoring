@@ -1,15 +1,17 @@
-from Common import dpktOctet, dpktFilter
 import dpkt
+from Common import dpktOctet, dpktFilter
+from GraphGenerator import wEFPConverterIncr
 
 class dpktTrafficSelector(object):
-    def __init__(self, trafficfilename, filterConfig=([],["1-4096","6000-20000"],[],[],["TCP","UDP"])):
+    def __init__(self, trafficfilename, filterConfig=([],[],[],[],[]), converterName="wEFP"):
         self.f = open(trafficfilename, 'rb')
         self.pcapIter = dpkt.pcap.Reader(self.f)
-        self.selectedPackets = []
         self._totalCount = 0
         self._ipCount = 0
         self._filteredCount = 0
         self.initTimestamp = -1
+        if converterName == "EFP" or "wEFP": # Now EFP and wEFP is combined, implemented as wEFPConverterIncr
+            self.graphConverter = wEFPConverterIncr()
         for timestamp, buf in self.pcapIter:
             if self.initTimestamp == -1:
                 self.initTimestamp = timestamp
@@ -24,13 +26,17 @@ class dpktTrafficSelector(object):
             self._ipCount += 1
             self.filterObj = dpktFilter(filterConfig)
             if self.filterObj.isSelected(self.c_packet):
-                self.selectedPackets.append(self.c_packet)
+                self.graphConverter.update(self.c_packet) # No longer use Iteration, use Increment instead. Less memory space
                 self._filteredCount += 1
         self.f.close()
+        #self.graphConverter.drawdemo()
+        #self.graphConverter.exportJSON("1.json")
 
     def getCount(self):
-        return (self._totalCount, self._ipCount, self._filteredCount)
+        return {"Total":self._totalCount, "Valid IP":self._ipCount, "Selected":self._filteredCount}
+
+# TODO: Implement pysharkTrafficSelector
 
 
-# a = dpktTrafficSelector("MAWI100K.pcap")
-# print(a.getCount())
+a = dpktTrafficSelector(trafficfilename="MAWI100K.pcap", filterConfig=([],["1-4096","6000-20000"],[],[],["TCP","UDP"]))
+print(a.getCount())
