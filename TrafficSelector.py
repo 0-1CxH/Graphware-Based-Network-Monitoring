@@ -26,6 +26,7 @@ class dpktTrafficSelector(object):
             self._ipCount += 1
             self.filterObj = dpktFilter(filterConfig)
             if self.filterObj.isSelected(self.c_packet):
+                #print(self.c_packet.timestamp,self.c_packet.proto,self.c_packet.length)
                 self.graphConverter.update(self.c_packet) # No longer use Iteration, use Increment instead. Less memory space
                 self._filteredCount += 1
         self.f.close()

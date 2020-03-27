@@ -19,6 +19,9 @@ class ipv4address(object):
         else:
             return None
 
+    def __str__(self):
+        return self.getStringIP()
+
     def getDecimalIP(self):
         if self.isValid():
             return int(self.addr)

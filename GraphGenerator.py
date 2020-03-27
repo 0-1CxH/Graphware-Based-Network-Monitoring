@@ -35,9 +35,15 @@ class wEFPConverterIncr(object): # Increamenting version of wEFP converter
     def exportJSON(self, outputfilename=None):
         jsondata = json_graph.node_link_data(self.NxObj)
         if outputfilename:
-            f = open(outputfilename,"w")
-            f.write(json.dumps(jsondata))
-            f.close()
+            with open(outputfilename,"w") as f:
+                f.write(json.dumps(jsondata))
         return jsondata
 
+# TODO: conntrackConverter
+class conntrackConverter(object):
+    def __init__(self):
+        self.NxObj = networkx.MultiDiGraph()
+
+    def update(self, pac):
+        pass
 
