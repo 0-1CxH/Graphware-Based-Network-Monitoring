@@ -31,7 +31,7 @@ class dpktTrafficSelector(object):
                 self._filteredCount += 1
         self.f.close()
         #self.graphConverter.drawdemo()
-        #self.graphConverter.exportJSON("1.json")
+        self.graphConverter.exportJSON("1.json")
 
     def getCount(self):
         return {"Total":self._totalCount, "Valid IP":self._ipCount, "Selected":self._filteredCount}
@@ -41,3 +41,12 @@ class dpktTrafficSelector(object):
 
 a = dpktTrafficSelector(trafficfilename="MAWI100K.pcap", filterConfig=([],["1-4096","6000-20000"],[],[],["TCP","UDP"]))
 print(a.getCount())
+print(a.graphConverter.globalData)
+def testXmeans():
+    from Algorithm import XmeansAlgorithm
+    b = XmeansAlgorithm(a.graphConverter.exportNetworkxObj())
+    b.process()
+    print(b.clusters)
+    print(len(b.clusters))
+    b.getVisualization()
+testXmeans()

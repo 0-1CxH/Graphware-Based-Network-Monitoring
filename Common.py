@@ -73,6 +73,9 @@ class port(object):
         else:
             self.value = portnum
 
+    def __int__(self):
+        return self.value
+
 
 class portrange(object):
     def __init__(self, lp): # list of ports/ranges in STRING format (comma-separated)
@@ -211,6 +214,19 @@ class dpktFilter(object):
             if not self.ipFilter.has(dpktoct.dip.getStringIP()):
                 return False
         return True
+
+class quintupleConnection(object):
+    def __init__(self, pac):
+        self.ip = set(str(pac.sip), str(pac.dip))
+        self.port = set(int(pac.sport), int(pac.dport))
+        self.prtl = pac.proto
+        self.status = None
+
+    def __eq__(self, other):
+        if self.ip == other.ip and self.port == other.port and self.prtl == other.prtl:
+            return True
+
+
 
 
 
