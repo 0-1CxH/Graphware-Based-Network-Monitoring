@@ -31,7 +31,7 @@ class dpktTrafficSelector(object):
                 self._filteredCount += 1
         self.f.close()
         #self.graphConverter.drawdemo()
-        self.graphConverter.exportJSON("1.json")
+        #self.graphConverter.exportJSON("1.json")
 
     def getCount(self):
         return {"Total":self._totalCount, "Valid IP":self._ipCount, "Selected":self._filteredCount}
@@ -49,4 +49,9 @@ def testXmeans():
     print(b.clusters)
     print(len(b.clusters))
     b.getVisualization()
-testXmeans()
+
+def testmec(nxobj=a.graphConverter.exportNetworkxObj()):
+    from Application import modifiedEdgeCentricAnalyzer
+    c = modifiedEdgeCentricAnalyzer(nxobj)
+    c.process()
+testmec()
