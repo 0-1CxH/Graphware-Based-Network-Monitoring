@@ -4,7 +4,7 @@ from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 from sklearn.preprocessing import normalize
 
 class XmeansAlgorithm(object):
-    def __init__(self, NxObj, amount_initial_centers=3, amount_max_centers=16):
+    def __init__(self, NxObj, amount_initial_centers=2, amount_max_centers=16):
         self.dataset = dict(NxObj.nodes.data())
         self.namelist = []
         self.datalist = []
