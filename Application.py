@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import json
 from Algorithm import XmeansAlgorithm
 
@@ -145,6 +146,12 @@ class modifiedEdgeCentricAnalyzer(object):
         self.anomalyscore()
 
     def exportNetworkxObj(self):
+        for clu in self.distribution:
+            cur_clu = self.distribution[clu]
+            for atnd in cur_clu['attachednodes']:
+                self.NxObj.nodes[atnd] = {}
+                self.NxObj.nodes[atnd]['data']['kldivergence'] = cur_clu['attachednodes'][atnd]['kldivergence']
+                self.NxObj.nodes[atnd]['data']['clusternumber'] = clu
         return self.NxObj
 
     def exportAnomalyScore(self, outputfilename=None):
@@ -152,7 +159,9 @@ class modifiedEdgeCentricAnalyzer(object):
             for clu in self.distribution:
                 cur_clu = self.distribution[clu]
                 for atnd in cur_clu['attachednodes']:
-                    self.anormlyscoredict[atnd] = cur_clu['attachednodes'][atnd]['kldivergence']
+                    self.anormlyscoredict[atnd] = {}
+                    self.anormlyscoredict[atnd]['kldivergence'] = cur_clu['attachednodes'][atnd]['kldivergence']
+                    self.anormlyscoredict[atnd]['clusternumber'] = clu
         if outputfilename:
             with open(outputfilename,"w") as f:
                 f.write(json.dumps(self.anormlyscoredict))
@@ -167,5 +176,19 @@ class modifiedEdgeCentricAnalyzer(object):
     def getGlobalStat(self):
         return self.globalStat
 
-    # TODO: visulization module
+    def visualize(self):
+        '''
+        ndnames = []
+        klds= []
+        clus = []
+        for item in self.anormlyscoredict:
+            ndnames.append(item)
+            klds.append(self.anormlyscoredict[item]['kldivergence'])
+            clus.append(self.anormlyscoredict[item]['clusternumber'])
+        plt.scatter(klds, clus)
+        plt.show()
+        '''
+
+
+    # TODO: visulization function
 

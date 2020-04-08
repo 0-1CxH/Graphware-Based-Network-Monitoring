@@ -39,7 +39,7 @@ class dpktTrafficSelector(object):
 # TODO: Implement pysharkTrafficSelector
 
 
-a = dpktTrafficSelector(trafficfilename="MAWI100K.pcap", filterConfig=([],[],[],[],["TCP","UDP","ICMP"]))
+a = dpktTrafficSelector(trafficfilename="MAWI100K.pcap", filterConfig=([],["1-10000"],[],[],["TCP","UDP"]))
 print(a.getCount())
 print(a.graphConverter.globalData)
 def testXmeans():
@@ -56,9 +56,10 @@ def testmec(nxobj=anxobj):
     from Application import modifiedEdgeCentricAnalyzer
     c = modifiedEdgeCentricAnalyzer(nxobj)
     c.process()
-    c.exportAnomalyScore("anoscr.json")
+    print(c.exportAnomalyScore("anoscr.json"))
     _ ,cr = c.getClusteringResults()
     print(len(cr), " Clusters, Center at:",cr)
     print("GlobalStat: ", c.getGlobalStat())
+    c.visualize()
 
 testmec()

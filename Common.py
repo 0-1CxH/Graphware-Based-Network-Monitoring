@@ -184,6 +184,7 @@ class dpktFilter(object):
     def __init__(self, filterconfig):
         lips, lps, lts, lls, lprtls = filterconfig
         # ARGS: list of ip string, list of port string, list of time string, list of length string, list of protocol string
+        # E.G. ["192.168.80.0/24"],["1024-8000"],["0-1"],["0-1024"],["TCP","UDP"]
         self.allIP = False
         self.allPort = False
         if len(lips) == 0 :
